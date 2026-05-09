@@ -1,0 +1,21 @@
+public class Product {
+    private String product;
+    private int stock;
+
+    public Product(String productName, int numStock){
+        this.product = productName;
+        this.stock = numStock;
+    }
+    public String getName(){
+        return product;
+    }
+    public int getStock(){
+        return stock;
+    }
+    public void reduceStock(int reduction){
+        stock-=reduction;
+    }
+    public void addStock(int addition){
+        stock+=addition;
+    }
+}
