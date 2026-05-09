@@ -1,0 +1,57 @@
+import java.util.HashMap;
+public class InventoryManager {
+    private HashMap<String, Product> inventory;
+    public boolean containsKey;
+
+    public InventoryManager(){
+        inventory = new HashMap<>();
+    }
+    public HashMap<String, Product> getInventory(){
+        return inventory;
+    }
+    public void createProduct(String prodName, int prodStock){
+        Product newProduct = new Product(prodName,prodStock);
+        inventory.put(prodName.toLowerCase(), newProduct);//adds it to inventory hasMap, no need to call twice
+    }
+
+    public void addStock(String prodName, int newStock){/*
+        later i want it to take a char '+' or '-' and it will decide whether it is 
+        adding or subtracting*/
+        if(!inventory.containsKey(prodName.toLowerCase())){
+            System.out.println("This item does not exist");
+            return;
+        } else {
+            Product thisProduct = inventory.get(prodName);
+            thisProduct.addStock(newStock);
+        }
+    
+    }
+    public void removeProduct(String prodName){
+        if(!inventory.containsKey(prodName)){
+            System.out.println("Product does not exist");  
+            return;
+        } else{
+            inventory.remove(prodName);
+        }
+    }
+    public void removeStock(String prodName, int stockReduction){
+        /*Eventually this will just be another section of updateStock; */
+        if(!inventory.containsKey(prodName)){
+            System.out.println("This product does not exist");
+            return;
+        }
+        Product thisProduct = inventory.get(prodName);
+        if (stockReduction <= 0) {
+        System.out.println("Invalid stock amount");
+        return;
+    }
+     
+        if(thisProduct.getStock()<stockReduction){
+                System.out.println("Not enough stock to remove");
+                return;
+            }
+             thisProduct.reduceStock(stockReduction);
+    }
+   
+}
+
