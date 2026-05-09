@@ -1,0 +1,86 @@
+import java.util.Scanner;
+import java.util.HashMap;
+public class Main {
+    public static void main(String[] args) throws Exception {
+        System.out.println("Hello, World!");
+
+        Scanner sc = new Scanner(System.in);
+        InventoryManager manager = new InventoryManager();
+        
+        System.out.print("Enter product name: ");
+        String prodName = sc.nextLine();
+
+
+        System.out.print("Enter product stock:");
+        int prodStock = sc.nextInt();
+    
+
+
+        manager.createProduct(prodName, prodStock);
+        //yo rewritet ts, this fucking thing should be a method
+            sc.nextLine(); // Consume the newline character
+            System.out.println("Enter product name: (or type 'exit' to quit)");
+            String input = sc.nextLine();
+            while(!manager.getInventory().containsKey(input.toLowerCase()) && !input.equalsIgnoreCase("exit")){
+                System.out.println("This product does not exist. Enter an existing product name: ");
+                input = sc.nextLine();
+            }
+
+            if(input.equalsIgnoreCase("exit")){
+                System.out.println("Exiting program.");
+                sc.close();
+                return;
+            }
+
+            while(true){
+        Product thisProduct = manager.getInventory().get(input);
+            System.out.println("Enter amount: ");
+            int amount = sc.nextInt();
+            sc.nextLine();
+
+
+            System.out.println("Add(+) or Remove(-) stock?");//should only run once
+            String choice = sc.nextLine();
+
+            while(!choice.equals("+") && !choice.equals("-")){
+                System.out.print("Invalid. Enter a valid operation (+ or -): ");//should only run once
+                choice = sc.nextLine();
+            }
+
+            while((amount > thisProduct.getStock() || amount <= 0) && choice.equals("-")){
+                System.out.println("Amount cannot be greater than available stock, negative, or zero. Try again: ");//fails
+                amount = sc.nextInt();
+                sc.nextLine();
+            }
+
+            while(amount <= 0){
+                System.out.println("Amount cannot be greater than available stock, negative, or zero. Try again: ");
+                amount = sc.nextInt();
+            }
+
+            if(choice.equals("-")){
+
+                while(amount > thisProduct.getStock()){
+                    System.out.println("Amount cannot be greater than available stock. Try again: ");
+                    amount = sc.nextInt();
+                }
+                 thisProduct.reduceStock(amount);
+                 System.out.println("Stock removed. Current stock: " + thisProduct.getStock());
+                 break;
+            }
+            if(choice.equals("+")){
+                thisProduct.addStock(amount);
+                System.out.println("Stock added. Current stock: " + thisProduct.getStock());
+                break;
+            }
+            
+        
+            if(thisProduct.getStock() == 0){
+                System.out.println("Stock is empty. Removing product from inventory.");
+                manager.removeProduct(input);
+                break;
+            }
+            }
+        sc.close();
+    }
+}
